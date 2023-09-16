@@ -21,7 +21,7 @@ contract RequireAssertRevertExample {
         value = _newValue;
     }
 
-    function doSomething() public {
+    function doSomething() public pure {
         // Revert: Reverts the transaction with an optional error message.
         revert("This transaction has been reverted");
     }
