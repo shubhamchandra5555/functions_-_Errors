@@ -1,28 +1,43 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.9;
 
-contract RequireAssertRevertExample {
-    address public owner;
+contract ExceptionHandlingExample {
     uint256 public value;
 
+    event ValueSet(uint256 newValue);
+
     constructor() {
-        owner = msg.sender;
+        value = 0;
     }
 
     function setValue(uint256 _newValue) public {
-        // Require: Ensures that a condition is met; otherwise, it reverts the transaction.
-        require(msg.sender == owner, "Only the owner can set the value");
+        // Use require() to check a condition and revert if it's not met.
         require(_newValue > value, "New value must be greater than the current value");
 
-        // Assert: Checks for internal errors; if false, it will trigger an exception.
-        assert(_newValue <= 1000); // Ensure the new value is not too high.
-
-        // Set the new value.
+        // Update the value.
         value = _newValue;
+
+        // Emit an event to indicate the value was set successfully.
+        emit ValueSet(value);
     }
 
-    function doSomething() public pure {
-        // Revert: Reverts the transaction with an optional error message.
-        revert("This transaction has been reverted");
+    function assertExample(uint256 a, uint256 b) public pure returns (uint256) {
+        // Use assert() to check an invariant. If it fails, it indicates a bug in the contract.
+        assert(a >= b);
+
+        // Return the result.
+        return a - b;
+    }
+
+    function revertExample(uint256 divisor) public pure returns (uint256) {
+        // Use revert() to handle invalid inputs or conditions that should not occur.
+        if (divisor == 0) {
+            revert("Division by zero is not allowed");
+        }
+
+        // Perform a division.
+        uint256 result = 10 / divisor;
+
+        return result;
     }
 }
